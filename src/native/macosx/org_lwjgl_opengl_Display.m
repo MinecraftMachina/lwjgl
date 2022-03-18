@@ -57,9 +57,6 @@ static NSAutoreleasePool *pool;
 
 static MacOSXPeerInfo *peer_info;
 
-static bool leftMouseDown = false;
-static bool rightMouseDown = false;
-
 static NSUInteger lastModifierFlags = 0;
 
 @implementation MacOSXKeyableWindow
@@ -382,13 +379,6 @@ static NSUInteger lastModifierFlags = 0;
 }
 
 - (void)mouseDown:(NSEvent *)event {
-	if ([event modifierFlags] & NSControlKeyMask) {
-		rightMouseDown = true;
-		[self rightMouseDown:event];
-		return;
-	}
-	
-	leftMouseDown = true;
 	[self mouseButtonState:event :0 :1];
 }
 
@@ -401,15 +391,7 @@ static NSUInteger lastModifierFlags = 0;
 }
 
 - (void)mouseUp:(NSEvent *)event {
-	if (rightMouseDown) {
-		rightMouseDown = false;
-		[self rightMouseUp:event];
-	}
-    
-	if (leftMouseDown) {
-		leftMouseDown = false;
-		[self mouseButtonState:event :0 :0];
-	}
+	[self mouseButtonState:event :0 :0];
 }
 
 - (void)rightMouseUp:(NSEvent *)event {
